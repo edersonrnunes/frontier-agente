@@ -29,9 +29,9 @@ uvicorn main:app --reload
 
 
 # docker build local
-docker build -it frontierai-backend .
+docker build -t frontierai-agente .
 # Rodar o projeto local:
-docker run -it -p 8000:8000 frontierai-backend:latest /bin/bash
+docker run -it -p 8000:8000 frontierai-agente:latest /bin/bash
 
 # Executar o container do último commit
 # Pull última versão

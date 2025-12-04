@@ -2,7 +2,7 @@ name: Pipeline build-and-push
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", develop ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
@@ -11,22 +11,7 @@ permissions:
   pull-requests: read
 
 jobs:
-#  Analysis:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Analyze with SonarCloud
-#        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        with:
-#          # Additional arguments for the SonarScanner CLI
-#          args:
-#            -Dsonar.projectKey=edersonrnunes_frontierai
-#            -Dsonar.organization=edersonrnunes
-#          projectBaseDir: .
-
   build-and-push:
-#    needs: Analysis
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -42,9 +27,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-#    - name: Submit dependencies
-#      uses: advanced-security/dependency-submission-action@v3 # Example action
-
     - name: Log in to Docker Hub
       uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
       with:
@@ -56,30 +38,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/frontierai-backend:latest
-
-#  deploy:
-#    needs: build-and-push
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v4
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: us-east-1
-
-#      - name: Update Kubeconfig for EKS
-#        run: aws eks update-kubeconfig --name cluster-apps --region us-east-1
-
-#      - name: Set configmap
-#        run: kubectl apply -f aws/tvg-simple-backend-configmap.yml
-
-#      - name: Set secret
-#        run: kubectl apply -f aws/tvg-simple-backend-secret.yml
-
-#      - name: Deploy Elasticsearch
-#        run: kubectl apply -f aws/kubernetes.yml
+        tags: ${{ secrets.DOCKER_USERNAME }}/frontierai-agente:latest
